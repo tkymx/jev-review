@@ -17,7 +17,7 @@ Viewpoint files are TOML. Pass one or more with `-v`; later files add viewpoints
 
 | Key | Required | Meaning |
 |---|---|---|
-| `id` | yes | `[a-z][a-z0-9_]*`, unique across all files |
+| `id` | yes | `[a-z][a-z0-9_]*`, unique across all files and across viewpoints and rules |
 | `question` | yes | One yes/no question about the added lines |
 | `exceptions` | no | List of sentences appended to the question ("Ignore ..."). At most three; the first works best. |
 | `severity` | no | `high`, `medium` (default) or `low`. Reported as-is; it does not change the colour. |
@@ -37,7 +37,7 @@ A compound check computed in code, so Jev never has to combine conditions itself
 
 | Key | Meaning |
 |---|---|
-| `id` | Unique id |
+| `id` | Unique id, shared namespace with viewpoints. When you split a viewpoint into a rule, give the rule the old id so reports stay comparable. |
 | `all` | Viewpoints that must all hold. Contributes `min(p)`. |
 | `any` | Viewpoints of which at least one must hold. Contributes `max(p)`. |
 | `none` | Viewpoints that must not hold. Contributes `1 - max(p)`. |
@@ -60,7 +60,7 @@ question = "Does an added line put a value into a string with +, ||, an f-string
 [[viewpoint]]
 id = "uses_placeholder"
 report = false
-question = "Does the added SQL use placeholders such as ?, $1 or :name?"
+question = "Does the added SQL pass values through ?, $1 or :name placeholders?"
 
 [[rule]]
 id = "sql_built_by_concat"

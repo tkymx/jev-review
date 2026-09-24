@@ -19,29 +19,32 @@ Reply in the user's language. Viewpoint text you write must be in the file's `[r
    jev-review lint <file> --format json
    ```
 
-   If `jev-review` is not installed, run `PYTHONPATH=src python -m jev_review lint <file> --format json` from the jev-review repository, or `pip install -e <path to jev-review>`. The linter also validates the file; if it fails with a format error, fix that first (`docs/viewpoint-format.md`).
+   If `jev-review` is not installed, run `PYTHONPATH=src python3 -m jev_review lint <file> --format json` from the jev-review repository, or `pip install -e <path to jev-review>`. Use `python3` where `python` does not exist (macOS). The linter also validates the file; if it fails with a format error, fix that first (`docs/viewpoint-format.md`).
 
 3. **Judge every viewpoint yourself**, including the ones the linter passed. The linter reads wording with regular expressions; it misses things. For each viewpoint, go through this list:
 
    | Check | Problem if... | Measured effect |
    |---|---|---|
-   | One fact | It asks about two or more conditions (AND, "and also", 「かつ」, a list of conditions that must all hold) | Recall 96% → 73% from 1 to 4 conditions; nested AND/OR 84%, combined in code 97% |
-   | Presence | It asks whether something is missing, or its answer depends on code outside the hunk | Absence questions: 77% false positives on clean code; presence questions: 3% |
+   | One fact | It asks about two or more conditions that must all hold (AND, "and also", 「かつ」), or it lists different kinds of problem (eval and XSS and pickle) in one question | Recall 96% → 73% from 1 to 4 conditions; nested AND/OR 84%, combined in code 97%. Listing several written forms of the same kind is fine: an OR over forms was 99.7% correct |
+   | Presence | It asks whether something is missing, or its answer depends on code outside the hunk | Absence questions: 77% false positives on clean code; presence questions: 3%. An absence tied to a call visible in the same lines ("calls requests.get without timeout=") is fine: that is a presence question |
    | Named forms | It names a category and relies on "such as" / 「など」 for the rest, or misses a language's form (e.g. `|| true`, `continue-on-error: true`, `try?`, `_ = err` for swallowed errors) | XSS under "dangerous call": 0.04; named: 0.94. GitHub Actions recall 33% with unnamed forms |
    | Concrete | It asks about an area ("security issue", "any problem", 「品質」) | Fired on other kinds of problems 35–76% of the time |
    | Not subjective | It asks readable / maintainable / clean / good design | Ranks a before/after pair well, but 54–75% as pass/fail |
    | Not a verdict | It asks "safe to merge?" | Never passed a defect, but stopped 47% of clean changes |
    | Visible, not intent | It needs the author's intent (logic errors, "as intended", inverted comparisons, missing None checks) | p = 0.65 on average; inverted comparisons missed in every condition |
-   | Exceptions | More than three, the important one not first, or scoped by a description of a kind instead of something visible (file path, object, function or variable name) | Last of three exceptions: 0.26 → 0.68. "Keys that are public by design" also cleared a Swift Google key (0.97 → 0.24); "the apiKey inside a JavaScript firebaseConfig object" did not (0.95) |
+   | Exceptions | More than three, the important one not first, or scoped by a description of a kind instead of something visible. The usual anchor is a path ("files under tests/ or named test_*"); an object, function or variable name also works. If the exception would exclude whole files, use the viewpoint's `files` glob instead | Last of three exceptions: 0.26 → 0.68. "Keys that are public by design" also cleared a Swift Google key (0.97 → 0.24); "the apiKey inside a JavaScript firebaseConfig object" did not (0.95) |
    | Target | A code check has `target = "any"`, or a prose check (docs, changelog wording) has the default `target = "code"` | Without the prose gate, Markdown hunks were flagged as bugs |
    | Scope | The question is language-specific but has no `files` glob | Other languages get asked a question that cannot apply |
    | Thresholds | `red` below 0.7 | p 0.5–0.7 was right about 48% of the time; 0.9+ was right 97% |
+   | Form | It does not end as a yes/no question, or runs past about 400 characters (lint JR010, JR011) | Jev returns a yes-probability; long questions tend to hide several conditions |
 
    Give each viewpoint one verdict:
    - **OK**: keep as is.
-   - **Fix**: keep the intent, rewrite the wording.
-   - **Split**: turn it into several viewpoints with `report = false` plus a `[[rule]]` (`all` / `any` / `none`).
-   - **Move out of Jev**: Jev cannot answer it reliably from a hunk (absence that needs context, intent, subjective quality, verdicts). Say who should check it instead: a person, an LLM with the surrounding code, a linter, or a type checker.
+   - **Fix**: keep the intent, rewrite the wording. An absence check becomes Fix when the thing it depends on is visible in the added lines (a call without an argument); otherwise it is Move out.
+   - **Split**: several conditions that must all hold become several viewpoints with `report = false` plus a `[[rule]]` (`all` / `any` / `none`) that takes the **original id**, so reports stay comparable. Several kinds of problem in one question become separate viewpoints, one per kind.
+   - **Move out of Jev**: Jev cannot answer it reliably from a hunk (absence that needs context, intent, subjective quality, verdicts). Say who should check it instead: a person, an LLM with the surrounding code, a linter, a SAST tool or a type checker. Remove it from the rewritten TOML and list it in a comment at the top of the file.
+
+   Conditions that depend on where a value comes from ("an external value") are judged from the hunk. Name the sources when you can (request.args, sys.argv, $1, github.event.*), and accept that a value passed in from elsewhere may be missed.
 
 4. **Write the rewrites.** Follow the rules:
    - One visible fact per viewpoint, ending as a yes/no question (「〜か。」 / "?").
@@ -50,7 +53,7 @@ Reply in the user's language. Viewpoint text you write must be in the file's `[r
    - At most three exceptions, most important first, each anchored to something visible.
    - Keep `id` values stable where the intent does not change, so reports stay comparable.
 
-5. **Show the result** as a table: id, verdict, reason (with the measured effect), proposed text. Then show the full rewritten TOML. Ask before overwriting the user's file; if they agree, write it and run `jev-review lint` again until it reports no errors or warnings.
+5. **Show the result** as a table: id, verdict, reason (with the measured effect), proposed text. Then write the full rewritten TOML to a new file next to the original (`<name>.proposed.toml`) and run `jev-review lint` on it until it reports no errors or warnings. Replace the original only when the user agrees. Viewpoints and rules share one id namespace; ids must be unique across both.
 
 6. **Measure, if possible.** When `TYPESAFE_API_KEY` is set (or the user points to an env file) and labeled samples exist, run the old and new files and compare:
 
@@ -68,7 +71,7 @@ Reply in the user's language. Viewpoint text you write must be in the file's `[r
 
 | id | verdict | why | proposed |
 |---|---|---|---|
-| missing_timeout | Move out | Absence question: 77% false positives on clean diffs | Check with a linter rule (requests without timeout=) or ask an LLM with the call site |
+| missing_timeout | Fix | Absence question: 77% false positives on clean diffs. The call is visible, so ask about the call | Does an added line call requests.get, requests.post or httpx.get without a timeout= argument in the same call? |
 | sql_and_input | Split | Three conditions with AND: recall drops to 81% | builds_sql / concatenates_value / uses_external_value + [[rule]] all |
 ...
 
