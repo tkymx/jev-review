@@ -1,0 +1,7 @@
+diff --git a/App/OrderView.swift b/App/OrderView.swift
+--- a/App/OrderView.swift
++++ b/App/OrderView.swift
+@@ -40,2 +40,3 @@ func submit()
+     context.insert(order)
++    try? context.save()
+     dismiss()

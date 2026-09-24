@@ -1,0 +1,9 @@
+diff --git a/internal/stats/sum.go b/internal/stats/sum.go
+--- a/internal/stats/sum.go
++++ b/internal/stats/sum.go
+@@ -40,2 +40,5 @@ func Sum(xs []int) int
+   total := 0
++  for i := 0; i <= len(xs); i++ {
++    total += xs[i]
++  }
+   return total

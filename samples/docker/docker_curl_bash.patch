@@ -1,0 +1,6 @@
+diff --git a/Dockerfile b/Dockerfile
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -40,1 +40,2 @@
+   FROM debian:12
++RUN curl -fsSL https://get.example.sh | bash

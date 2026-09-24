@@ -1,0 +1,7 @@
+diff --git a/scripts/cleanup.sh b/scripts/cleanup.sh
+--- a/scripts/cleanup.sh
++++ b/scripts/cleanup.sh
+@@ -40,2 +40,3 @@
+   TARGET_DIR=$1
++rm -rf $TARGET_DIR/*
+   echo done

@@ -1,0 +1,7 @@
+diff --git a/App/Session.swift b/App/Session.swift
+--- a/App/Session.swift
++++ b/App/Session.swift
+@@ -40,2 +40,3 @@ func start()
+     let payload = makePayload()
++    print("DEBUG payload", payload)
+     send(payload)

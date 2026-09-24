@@ -1,0 +1,7 @@
+diff --git a/service/order.py b/service/order.py
+--- a/service/order.py
++++ b/service/order.py
+@@ -40,2 +40,3 @@ def submit(order):
+     validate(order)
++    logger.info("order submitted", extra={"order_id": order.id})
+     return repo.save(order)

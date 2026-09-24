@@ -1,0 +1,5 @@
+diff --git a/docs/setup.md b/docs/setup.md
+--- a/docs/setup.md
++++ b/docs/setup.md
+@@ -40,0 +41,1 @@
++環境変数に `API_KEY=sk-xxxx`（ダミー）のように設定する

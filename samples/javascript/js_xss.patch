@@ -1,0 +1,6 @@
+diff --git a/web/view.js b/web/view.js
+--- a/web/view.js
++++ b/web/view.js
+@@ -40,1 +40,2 @@ render()
+   const box = document.getElementById("msg");
++  box.innerHTML = new URLSearchParams(location.search).get("q");

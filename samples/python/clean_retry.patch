@@ -1,0 +1,12 @@
+diff --git a/worker/sync.py b/worker/sync.py
+--- a/worker/sync.py
++++ b/worker/sync.py
+@@ -40,1 +40,8 @@ def push_with_retry(item, attempts=3):
+     last = None
++    for i in range(attempts):
++        try:
++            return push(item)
++        except TransientError as e:
++            last = e
++            time.sleep(2 ** i)
++    raise last

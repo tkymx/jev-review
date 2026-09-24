@@ -1,0 +1,6 @@
+diff --git a/internal/config/load.go b/internal/config/load.go
+--- a/internal/config/load.go
++++ b/internal/config/load.go
+@@ -40,0 +41,2 @@ func Load(path string) (*Config, error)
++  data, _ := os.ReadFile(path)
++  return parse(data)

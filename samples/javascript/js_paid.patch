@@ -1,0 +1,8 @@
+diff --git a/web/batch.js b/web/batch.js
+--- a/web/batch.js
++++ b/web/batch.js
+@@ -40,1 +40,4 @@ async function makeImages()
+   const prompts = await loadPrompts();
++  for (const p of prompts) {
++    await openai.images.generate({ model: "gpt-image-1", prompt: p, n: 4 });
++  }

@@ -1,0 +1,44 @@
+# A viewpoint file written only with anti-patterns, to try `jev-review lint`
+# and the audit-viewpoints skill. Each wording lost accuracy in the experiments.
+
+[review]
+name = "anti-patterns"
+language = "en"
+red = 0.5
+
+[[viewpoint]]
+id = "missing_timeout"            # JR001: absence question
+question = "Is a timeout missing on the external API call?"
+
+[[viewpoint]]
+id = "sql_and_input"              # JR002: conditions joined with AND
+question = "Is there an SQL statement that uses string concatenation and also takes an external value as well as running inside a loop?"
+
+[[viewpoint]]
+id = "nested_logic"               # JR003: nested logic
+question = "Is there a loop and also either (a sleep call or an external API call)?"
+
+[[viewpoint]]
+id = "security_problem"           # JR004: abstract
+question = "Does this change have any security issues?"
+
+[[viewpoint]]
+id = "readable"                   # JR005: subjective
+question = "Is this code readable?"
+
+[[viewpoint]]
+id = "merge_ok"                   # JR006: verdict
+question = "Is this change safe to merge to production?"
+
+[[viewpoint]]
+id = "logic_error"                # JR007: needs the intent
+question = "Does an added line contain a logical error?"
+
+[[viewpoint]]
+id = "dangerous_call"             # JR008: category with examples
+question = "Does an added line make a dangerous call such as eval or SQL concatenation?"
+
+[[viewpoint]]
+id = "debug_print"                # JR009: too many exceptions
+question = "Does an added line contain a print labeled DEBUG?"
+exceptions = ["Ignore logging.", "Ignore scripts.", "Ignore sample code.", "Ignore tests."]

@@ -1,0 +1,8 @@
+diff --git a/io/report.py b/io/report.py
+--- a/io/report.py
++++ b/io/report.py
+@@ -40,2 +40,4 @@ def write_report(path, rows):
+     data = render(rows)
++    f = open(path, "w")
++    f.write(data)
+     return path

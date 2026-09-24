@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jev-review"
+version = "0.1.0"
+description = "Screen git diffs with TypeSafe Jev one hunk at a time, using viewpoint files, and write an XML report."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+dependencies = []
+authors = [{ name = "tkymx" }]
+keywords = ["code-review", "jev", "typesafe", "llm", "static-analysis", "ci"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Software Development :: Quality Assurance",
+]
+
+[project.urls]
+Homepage = "https://github.com/tkymx/jev-review"
+
+[project.scripts]
+jev-review = "jev_review.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+jev_review = ["data/viewpoints/*.toml"]

@@ -1,0 +1,36 @@
+diff --git a/api/users.py b/api/users.py
+--- a/api/users.py
++++ b/api/users.py
+@@ -40,2 +40,4 @@ def find_user(name):
+     conn = get_conn()
++    q = "SELECT * FROM users WHERE name = '" + name + "'"
++    return conn.execute(q).fetchall()
+     # 呼び出し元でページングする
+diff --git a/web/view.js b/web/view.js
+--- a/web/view.js
++++ b/web/view.js
+@@ -40,1 +40,2 @@ render()
+   const box = document.getElementById("msg");
++  box.innerHTML = new URLSearchParams(location.search).get("q");
+diff --git a/service/order.py b/service/order.py
+--- a/service/order.py
++++ b/service/order.py
+@@ -40,2 +40,4 @@ def submit(order):
+     validate(order)
++    print("DEBUG order payload:", order.raw)
++    # TODO: あとで消す
+     return repo.save(order)
+diff --git a/api/orders.py b/api/orders.py
+--- a/api/orders.py
++++ b/api/orders.py
+@@ -40,2 +40,4 @@ def find_orders(uid, limit):
+     conn = get_conn()
++    return conn.execute("SELECT * FROM orders WHERE uid = ? LIMIT ?",
++                        (uid, limit)).fetchall()
+     
+diff --git a/docs/guide.md b/docs/guide.md
+--- a/docs/guide.md
++++ b/docs/guide.md
+@@ -40,0 +41,2 @@
++## 禁止事項
++- `eval()` や `os.system()` に外部入力を渡さない

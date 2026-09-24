@@ -1,0 +1,7 @@
+diff --git a/web/view.js b/web/view.js
+--- a/web/view.js
++++ b/web/view.js
+@@ -40,1 +40,3 @@ render()
+   const q = new URLSearchParams(location.search);
++  const page = Number.parseInt(q.get("page") ?? "1", 10) || 1;
++  box.textContent = `page ${page}`;

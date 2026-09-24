@@ -1,0 +1,49 @@
+# わざとアンチパターンだけで書いた観点ファイル。`jev-review lint` と audit-viewpoints スキルの動作確認用。
+# どれも実験で精度が落ちた書き方。
+
+[review]
+name = "anti-patterns"
+language = "ja"
+red = 0.5
+
+[[viewpoint]]
+id = "missing_timeout"            # JR001: 「〜が無いか」型
+question = "外部 API の呼び出しにタイムアウトの指定が無いか。"
+
+[[viewpoint]]
+id = "sql_and_input"              # JR002: 条件を「かつ」でつなぐ
+question = "追加行に SQL 文があり、かつ文字列の連結を使っており、かつ外部から来た値を使っているか。"
+
+[[viewpoint]]
+id = "nested_logic"               # JR003: 入れ子の論理
+question = "追加行について、①が当てはまり、かつ ②と③のうち少なくとも 1 つが当てはまるか。① ループがある ② sleep を呼ぶ ③ 外部 API を呼ぶ"
+
+[[viewpoint]]
+id = "security_problem"           # JR004: 抽象的
+question = "この変更にセキュリティ上の問題があるか。"
+
+[[viewpoint]]
+id = "readable"                   # JR005: 主観的
+question = "このコードは読みやすいか。"
+
+[[viewpoint]]
+id = "merge_ok"                   # JR006: 合否を聞く
+question = "この変更はこのまま本番にマージしてよい品質か。"
+
+[[viewpoint]]
+id = "logic_error"                # JR007: 意味を読むバグ
+question = "追加行にロジックの誤りがあるか。"
+
+[[viewpoint]]
+id = "dangerous_call"             # JR008: 「など」でくくる
+question = "追加行に eval や SQL の連結など、危険な呼び出しがあるか。"
+
+[[viewpoint]]
+id = "debug_print"                # JR009: 例外が多すぎる
+question = "追加行に DEBUG と書かれた print があるか。"
+exceptions = [
+  "ただし、ログ出力は除く。",
+  "ただし、スクリプトは除く。",
+  "ただし、サンプルコードは除く。",
+  "ただし、テストコードは除く。",
+]

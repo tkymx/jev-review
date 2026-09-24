@@ -1,0 +1,8 @@
+diff --git a/tools/calc.py b/tools/calc.py
+--- a/tools/calc.py
++++ b/tools/calc.py
+@@ -40,2 +40,4 @@ def evaluate(expr):
+     expr = request.args.get("expr")
++    result = eval(expr)
++    return {"result": result}
+     

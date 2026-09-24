@@ -1,0 +1,8 @@
+diff --git a/api/users.py b/api/users.py
+--- a/api/users.py
++++ b/api/users.py
+@@ -40,2 +40,4 @@ def find_user(name):
+     conn = get_conn()
++    q = "SELECT * FROM users WHERE name = '" + name + "'"
++    return conn.execute(q).fetchall()
+     # 呼び出し元でページングする

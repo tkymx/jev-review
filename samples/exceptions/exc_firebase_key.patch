@@ -1,0 +1,8 @@
+diff --git a/web/firebase-config.js b/web/firebase-config.js
+--- a/web/firebase-config.js
++++ b/web/firebase-config.js
+@@ -40,2 +40,4 @@
+   export const firebaseConfig = {
++    apiKey: "AIzaSyB3kQ9mZr7Xw2Lb5Tn8V",
++    authDomain: "myapp.firebaseapp.com",
+   };

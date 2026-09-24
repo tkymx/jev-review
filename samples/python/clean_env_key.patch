@@ -1,0 +1,8 @@
+diff --git a/config/client.py b/config/client.py
+--- a/config/client.py
++++ b/config/client.py
+@@ -40,2 +40,4 @@ def build_client():
+     base = settings.api_base
++    key = os.environ["API_KEY"]
++    return Client(base, key, timeout=30)
+     

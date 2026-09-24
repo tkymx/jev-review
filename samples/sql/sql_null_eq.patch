@@ -1,0 +1,5 @@
+diff --git a/db/queries/active.sql b/db/queries/active.sql
+--- a/db/queries/active.sql
++++ b/db/queries/active.sql
+@@ -40,0 +41,1 @@
++SELECT id FROM users WHERE deleted_at = NULL;

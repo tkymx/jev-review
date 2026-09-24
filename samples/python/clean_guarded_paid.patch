@@ -1,0 +1,9 @@
+diff --git a/media/clip.py b/media/clip.py
+--- a/media/clip.py
++++ b/media/clip.py
+@@ -40,2 +40,5 @@ def make_clip(prompt, seconds, budget_yen):
+     est = seconds * YEN_PER_SECOND
++    if est > budget_yen:
++        raise BudgetExceeded(f"{est} > {budget_yen}")
++    return _generate(prompt, seconds)
+     

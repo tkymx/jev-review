@@ -1,0 +1,31 @@
+# 複合条件の書き方の例
+#
+# 「SQL 文があり、かつ連結しており、かつプレースホルダを使っていないか」を 1 問で聞くと見落とす。
+# 条件を 1 つずつの観点（report = false）にして、[[rule]] でプログラム側に組み合わせさせる。
+# 実測: 入れ子の条件を 1 問で聞くと 84%、1 つずつ聞いて組み合わせると 97% 正しかった。
+
+[review]
+name = "compound-example"
+language = "ja"
+
+[[viewpoint]]
+id = "builds_sql"
+report = false
+question = "追加行に SQL 文（SELECT、INSERT、UPDATE、DELETE）があるか。"
+
+[[viewpoint]]
+id = "concatenates_value"
+report = false
+question = "追加行で、+、||、f-string、format を使って文字列に値を埋め込んでいるか。"
+
+[[viewpoint]]
+id = "uses_placeholder"
+report = false
+question = "追加行の SQL で、? や $1 や :name のプレースホルダを使っているか。"
+
+[[rule]]
+id = "sql_built_by_concat"
+severity = "high"
+all = ["builds_sql", "concatenates_value"]
+none = ["uses_placeholder"]
+message = "SQL 文を文字列の連結で組み立てている"

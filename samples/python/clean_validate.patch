@@ -1,0 +1,8 @@
+diff --git a/api/users.py b/api/users.py
+--- a/api/users.py
++++ b/api/users.py
+@@ -40,2 +40,4 @@ def create_user(payload):
+     schema.validate(payload)
++    if not payload.get("email"):
++        raise ValidationError("email is required")
+     return repo.create(payload)

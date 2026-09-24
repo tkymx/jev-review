@@ -1,0 +1,10 @@
+diff --git a/worker/sync.py b/worker/sync.py
+--- a/worker/sync.py
++++ b/worker/sync.py
+@@ -40,3 +40,6 @@ def sync_all(items):
+     for it in items:
+         try:
+             push(it)
++        except Exception as e:
++            logger.warning("skip %s: %s", it.id, e)
++            continue
