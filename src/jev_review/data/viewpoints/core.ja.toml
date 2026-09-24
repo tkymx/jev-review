@@ -1,0 +1,122 @@
+# jev-review の基本観点（日本語）
+#
+# 書き方のルール（docs/findings.ja.md の実測にもとづく）
+# - 1 つの観点で聞くのは 1 つの事実だけ。「かつ」でつなぐと見落とす（1 条件 96% → 4 条件 73%）
+# - 「〜があるか」の形で聞く。「〜が無いか」は正常な差分でも 77% が yes になる
+# - 見つけたい書き方は名指しする。「など」でくくると、例に書いた種類しか拾わない
+# - 例外は 3 個まで。いちばん効かせたいものを先頭に書く
+# - 意味を読まないと分からないバグ（不等号の逆、None 参照）は Jev が苦手なので入れていない
+
+[review]
+name = "core.ja"
+language = "ja"
+red = 0.7
+yellow = 0.5
+
+# ---- 秘密情報 -----------------------------------------------------------------
+
+[[viewpoint]]
+id = "hardcoded_secret"
+severity = "high"
+question = "追加行に、sk-、ghp_、AIza、AKIA、xoxb- で始まる値や長いランダムな英数字の値のような、API キー・トークン・パスワード・秘密鍵が文字列としてそのまま書かれているか。"
+exceptions = [
+  "ただし、dummy・test・sample・xxxx を含むテスト用や説明用の値は除く。",
+  "ただし、JavaScript の firebaseConfig オブジェクトの中の apiKey は除く。",
+  "ただし、コメントの中の書き方の例は除く。",
+]
+
+# ---- 注入 ---------------------------------------------------------------------
+
+[[viewpoint]]
+id = "sql_injection"
+severity = "high"
+question = "追加行で、外部から来た値を、+、||、f-string、format、%、テンプレート文字列による連結で SQL 文に埋め込んでいるか。"
+exceptions = [
+  "ただし、連結しているのがコード内の定数だけの場合は除く。",
+  "ただし、? や $1 や :name のプレースホルダで値を渡している場合は除く。",
+]
+
+[[viewpoint]]
+id = "shell_injection"
+severity = "high"
+question = "追加行で、外部から来た値を、os.system、subprocess の shell=True、child_process.exec、バッククォート、GitHub Actions の run: の中の ${{ github.event.* }} や ${{ github.head_ref }} のように、シェルコマンドの文字列に埋め込んで実行しているか。"
+exceptions = ["ただし、テストコード（tests/ の中や test_ で始まるファイル）の中は除く。"]
+
+[[viewpoint]]
+id = "code_eval"
+severity = "high"
+question = "追加行で、外部から来た値を eval、exec、new Function、Function() でプログラムとして実行しているか。"
+exceptions = ["ただし、テストコード（tests/ の中や test_ で始まるファイル）の中は除く。"]
+
+[[viewpoint]]
+id = "html_injection"
+severity = "high"
+question = "追加行で、外部から来た値を innerHTML、outerHTML、insertAdjacentHTML、document.write、dangerouslySetInnerHTML、v-html で画面の HTML に差し込んでいるか。"
+
+[[viewpoint]]
+id = "remote_script"
+severity = "high"
+question = "追加行で、curl ... | bash、curl ... | sh、wget -O- ... | sh、iex (irm ...) のように、ネットワークから取得したスクリプトを中身を確かめずにそのまま実行しているか。"
+
+[[viewpoint]]
+id = "unsafe_delete"
+severity = "high"
+question = "追加行で、rm -rf、rm -r、Remove-Item -Recurse の削除パスに、空になりうる変数を引用符や ${VAR:?} の空チェックなしで使っているか。"
+
+# ---- エラー処理 -----------------------------------------------------------------
+
+[[viewpoint]]
+id = "swallowed_error"
+severity = "medium"
+question = "追加行に、except: pass、catch (e) {}、|| true、try?、エラーの戻り値を _ で捨てる、continue-on-error: true のように、失敗を捕まえて何もしない書き方や失敗を無視する書き方があるか。"
+exceptions = [
+  "ただし、ログを出してから処理を続ける場合は除く。",
+  "ただし、FileNotFoundError のように『既に無い』ことだけを無視する場合は除く。",
+  "ただし、finally の中の close など、後片付けの失敗を無視する場合は除く。",
+]
+
+# ---- 開発用の痕跡 ---------------------------------------------------------------
+
+[[viewpoint]]
+id = "debug_leftover"
+severity = "low"
+question = "追加行に、DEBUG と書かれた print、console.log、NSLog、fmt.Println、puts のようなデバッグ用の出力や、『あとで消す』『一時的』と書かれた TODO があるか。"
+exceptions = [
+  "ただし、テストコード（tests/ の中や test_ で始まるファイル）の中は除く。",
+  "ただし、CLI の main 関数で結果を利用者に見せるための出力は除く。",
+]
+
+# ---- 費用 ---------------------------------------------------------------------
+
+[[viewpoint]]
+id = "paid_api_without_guard"
+severity = "high"
+question = "追加行に、生成 AI、画像生成、動画生成、音声合成のような従量課金 API を、金額や回数の上限チェックなしで呼び出しているコードがあるか。"
+
+# ---- 名前の付いたバグの形 --------------------------------------------------------
+# 形が字面で分かるものだけを入れている。
+
+[[viewpoint]]
+id = "loop_off_by_one"
+severity = "medium"
+question = "追加行のループの終了条件が、i <= len(xs)、i <= arr.length、range(0, len(xs) - 1) のように、配列の範囲から 1 つずれているか。"
+
+[[viewpoint]]
+id = "assignment_in_condition"
+severity = "medium"
+question = "追加行の if や while の条件の中に、比較（== や ===）のつもりで書かれた代入（=）があるか。"
+
+[[viewpoint]]
+id = "null_equality"
+severity = "medium"
+question = "追加行の SQL に、IS NULL の代わりに = NULL や != NULL で NULL と比べている箇所があるか。"
+
+[[viewpoint]]
+id = "unbounded_wait_loop"
+severity = "medium"
+question = "追加行に、while True や for (;;) のように、回数の上限もタイムアウトも無い待ちループがあるか。"
+
+[[viewpoint]]
+id = "unclosed_resource"
+severity = "low"
+question = "追加行に、open()、fopen、os.Open、sql.Open で開いたファイルや接続を、with 文、defer、try-with-resources、finally で閉じずに使っているコードがあるか。"

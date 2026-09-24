@@ -1,0 +1,8 @@
+diff --git a/api/orders.py b/api/orders.py
+--- a/api/orders.py
++++ b/api/orders.py
+@@ -40,2 +40,4 @@ def find_orders(uid, limit):
+     conn = get_conn()
++    return conn.execute("SELECT * FROM orders WHERE uid = ? LIMIT ?",
++                        (uid, limit)).fetchall()
+     

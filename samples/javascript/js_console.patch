@@ -1,0 +1,7 @@
+diff --git a/web/user.js b/web/user.js
+--- a/web/user.js
++++ b/web/user.js
+@@ -40,2 +40,3 @@ async function load(id)
+   const user = await getUser(id);
++  console.log("DEBUG user", user);
+   return user;

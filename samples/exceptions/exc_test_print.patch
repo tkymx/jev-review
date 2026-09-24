@@ -1,0 +1,8 @@
+diff --git a/tests/test_order.py b/tests/test_order.py
+--- a/tests/test_order.py
++++ b/tests/test_order.py
+@@ -40,3 +40,4 @@ def test_submit():
+   def test_submit():
+       order = make_order()
++      print("DEBUG", order.raw)
+       assert submit(order)

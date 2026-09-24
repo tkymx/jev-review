@@ -1,0 +1,8 @@
+diff --git a/src/auth.ts b/src/auth.ts
+--- a/src/auth.ts
++++ b/src/auth.ts
+@@ -40,1 +40,4 @@ async function promote(id: string)
+   const user = await repo.find(id);
++  if (user.role = "admin") {
++    grantAll(user);
++  }

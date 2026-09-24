@@ -1,0 +1,11 @@
+diff --git a/poll/job.py b/poll/job.py
+--- a/poll/job.py
++++ b/poll/job.py
+@@ -40,2 +40,7 @@ def wait_done(job_id):
+     started = time.time()
++    while True:
++        st = api.status(job_id)
++        if st == "DONE":
++            return st
++        time.sleep(5)
+     

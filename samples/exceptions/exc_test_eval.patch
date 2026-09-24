@@ -1,0 +1,6 @@
+diff --git a/tests/test_calc.py b/tests/test_calc.py
+--- a/tests/test_calc.py
++++ b/tests/test_calc.py
+@@ -40,1 +40,2 @@ def test_expr():
+   def test_expr():
++      assert eval("1 + 2") == 3

@@ -1,0 +1,5 @@
+diff --git a/docs/cost.md b/docs/cost.md
+--- a/docs/cost.md
++++ b/docs/cost.md
+@@ -40,0 +41,1 @@
++Veo の生成は 1 秒あたり約 ¥70 かかる。生成前に見積もりを出す。

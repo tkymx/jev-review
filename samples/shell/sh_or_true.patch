@@ -1,0 +1,7 @@
+diff --git a/scripts/ci.sh b/scripts/ci.sh
+--- a/scripts/ci.sh
++++ b/scripts/ci.sh
+@@ -40,2 +40,3 @@
+   npm ci
++npm test || true
+   npm run build

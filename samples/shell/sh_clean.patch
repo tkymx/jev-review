@@ -1,0 +1,6 @@
+diff --git a/scripts/build.sh b/scripts/build.sh
+--- a/scripts/build.sh
++++ b/scripts/build.sh
+@@ -40,0 +41,2 @@
++set -euo pipefail
++readonly OUT_DIR="${OUT_DIR:?OUT_DIR is required}"

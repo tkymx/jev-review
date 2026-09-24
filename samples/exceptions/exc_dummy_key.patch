@@ -1,0 +1,7 @@
+diff --git a/tests/conftest.py b/tests/conftest.py
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -40,1 +40,3 @@ def client():
+   def client():
++      api_key = "test-dummy-key-0000000000"
++      return Client("http://localhost", api_key)

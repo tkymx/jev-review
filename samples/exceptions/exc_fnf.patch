@@ -1,0 +1,8 @@
+diff --git a/worker/cleanup.py b/worker/cleanup.py
+--- a/worker/cleanup.py
++++ b/worker/cleanup.py
+@@ -40,2 +40,4 @@ def remove_tmp(path):
+     try:
+         os.remove(path)
++    except FileNotFoundError:
++        pass

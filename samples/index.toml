@@ -1,0 +1,334 @@
+# jev-review eval 用の正解付きサンプル。
+# expect: 発火すべき観点 ID（同梱の core.ja / core.en と共通）。[] は何も発火しないのが正解。
+
+[[case]]
+id = "sql_concat"
+patch = "python/sql_concat.patch"
+expect = ["sql_injection"]
+
+[[case]]
+id = "eval_input"
+patch = "python/eval_input.patch"
+expect = ["code_eval"]
+
+[[case]]
+id = "shell_concat"
+patch = "python/shell_concat.patch"
+expect = ["shell_injection"]
+
+[[case]]
+id = "hardcoded_secret"
+patch = "python/hardcoded_secret.patch"
+expect = ["hardcoded_secret"]
+
+[[case]]
+id = "empty_except"
+patch = "python/empty_except.patch"
+expect = ["swallowed_error"]
+
+[[case]]
+id = "debug_print"
+patch = "python/debug_print.patch"
+expect = ["debug_leftover"]
+
+[[case]]
+id = "paid_api_noguard"
+patch = "python/paid_api_noguard.patch"
+expect = ["paid_api_without_guard"]
+
+[[case]]
+id = "off_by_one"
+patch = "python/off_by_one.patch"
+expect = ["loop_off_by_one"]
+
+[[case]]
+id = "resource_leak"
+patch = "python/resource_leak.patch"
+expect = ["unclosed_resource"]
+
+[[case]]
+id = "unbounded_loop"
+patch = "python/unbounded_loop.patch"
+expect = ["unbounded_wait_loop"]
+
+[[case]]
+id = "clean_validate"
+patch = "python/clean_validate.patch"
+expect = []
+note = "正常なコード"
+
+[[case]]
+id = "clean_param_sql"
+patch = "python/clean_param_sql.patch"
+expect = []
+note = "正常なコード"
+
+[[case]]
+id = "clean_retry"
+patch = "python/clean_retry.patch"
+expect = []
+note = "正常なコード"
+
+[[case]]
+id = "clean_env_key"
+patch = "python/clean_env_key.patch"
+expect = []
+note = "正常なコード"
+
+[[case]]
+id = "clean_guarded_paid"
+patch = "python/clean_guarded_paid.patch"
+expect = []
+note = "正常なコード"
+
+[[case]]
+id = "clean_logging"
+patch = "python/clean_logging.patch"
+expect = []
+note = "正常なコード"
+
+[[case]]
+id = "js_eval"
+patch = "javascript/js_eval.patch"
+expect = ["code_eval"]
+
+[[case]]
+id = "js_xss"
+patch = "javascript/js_xss.patch"
+expect = ["html_injection"]
+
+[[case]]
+id = "js_empty_catch"
+patch = "javascript/js_empty_catch.patch"
+expect = ["swallowed_error"]
+
+[[case]]
+id = "js_console"
+patch = "javascript/js_console.patch"
+expect = ["debug_leftover"]
+
+[[case]]
+id = "js_paid"
+patch = "javascript/js_paid.patch"
+expect = ["paid_api_without_guard"]
+
+[[case]]
+id = "js_clean"
+patch = "javascript/js_clean.patch"
+expect = []
+note = "正常なコード"
+
+[[case]]
+id = "ts_off_by_one"
+patch = "typescript/ts_off_by_one.patch"
+expect = ["loop_off_by_one"]
+
+[[case]]
+id = "ts_token"
+patch = "typescript/ts_token.patch"
+expect = ["hardcoded_secret"]
+
+[[case]]
+id = "ts_assign_in_if"
+patch = "typescript/ts_assign_in_if.patch"
+expect = ["assignment_in_condition"]
+
+[[case]]
+id = "ts_clean"
+patch = "typescript/ts_clean.patch"
+expect = []
+note = "正常なコード"
+
+[[case]]
+id = "sh_rm"
+patch = "shell/sh_rm.patch"
+expect = ["unsafe_delete"]
+
+[[case]]
+id = "sh_secret"
+patch = "shell/sh_secret.patch"
+expect = ["hardcoded_secret"]
+
+[[case]]
+id = "sh_or_true"
+patch = "shell/sh_or_true.patch"
+expect = ["swallowed_error"]
+
+[[case]]
+id = "sh_clean"
+patch = "shell/sh_clean.patch"
+expect = []
+note = "正常なコード"
+
+[[case]]
+id = "sql_dynamic"
+patch = "sql/sql_dynamic.patch"
+expect = ["sql_injection"]
+
+[[case]]
+id = "sql_null_eq"
+patch = "sql/sql_null_eq.patch"
+expect = ["null_equality"]
+
+[[case]]
+id = "sql_clean"
+patch = "sql/sql_clean.patch"
+expect = []
+note = "正常なコード"
+
+[[case]]
+id = "gha_plain_secret"
+patch = "github-actions/gha_plain_secret.patch"
+expect = ["hardcoded_secret"]
+
+[[case]]
+id = "gha_injection"
+patch = "github-actions/gha_injection.patch"
+expect = ["shell_injection"]
+
+[[case]]
+id = "gha_continue"
+patch = "github-actions/gha_continue.patch"
+expect = ["swallowed_error"]
+
+[[case]]
+id = "gha_clean"
+patch = "github-actions/gha_clean.patch"
+expect = []
+note = "正常なコード"
+
+[[case]]
+id = "docker_secret"
+patch = "docker/docker_secret.patch"
+expect = ["hardcoded_secret"]
+
+[[case]]
+id = "docker_curl_bash"
+patch = "docker/docker_curl_bash.patch"
+expect = ["remote_script"]
+
+[[case]]
+id = "docker_clean"
+patch = "docker/docker_clean.patch"
+expect = []
+note = "正常なコード"
+
+[[case]]
+id = "go_ignore_err"
+patch = "go/go_ignore_err.patch"
+expect = ["swallowed_error"]
+
+[[case]]
+id = "go_sql"
+patch = "go/go_sql.patch"
+expect = ["sql_injection"]
+
+[[case]]
+id = "go_off_by_one"
+patch = "go/go_off_by_one.patch"
+expect = ["loop_off_by_one"]
+
+[[case]]
+id = "go_clean"
+patch = "go/go_clean.patch"
+expect = []
+note = "正常なコード"
+
+[[case]]
+id = "swift_secret"
+patch = "swift/swift_secret.patch"
+expect = ["hardcoded_secret"]
+
+[[case]]
+id = "swift_try_q"
+patch = "swift/swift_try_q.patch"
+expect = ["swallowed_error"]
+
+[[case]]
+id = "swift_print"
+patch = "swift/swift_print.patch"
+expect = ["debug_leftover"]
+
+[[case]]
+id = "swift_clean"
+patch = "swift/swift_clean.patch"
+expect = []
+note = "正常なコード"
+
+[[case]]
+id = "md_mentions_eval"
+patch = "markdown/md_mentions_eval.patch"
+expect = []
+note = "文章。コード用の観点は判定しない"
+
+[[case]]
+id = "md_dummy_key"
+patch = "markdown/md_dummy_key.patch"
+expect = []
+note = "文章。コード用の観点は判定しない"
+
+[[case]]
+id = "md_cost"
+patch = "markdown/md_cost.patch"
+expect = []
+note = "文章。コード用の観点は判定しない"
+
+[[case]]
+id = "exc_cli_print"
+patch = "exceptions/exc_cli_print.patch"
+expect = []
+note = "debug_leftover の例外（CLI の main での結果表示）に当たる"
+
+[[case]]
+id = "exc_test_print"
+patch = "exceptions/exc_test_print.patch"
+expect = []
+note = "debug_leftover の例外（テストコード）に当たる"
+
+[[case]]
+id = "exc_const_sql"
+patch = "exceptions/exc_const_sql.patch"
+expect = []
+note = "sql_injection の例外（定数だけの連結）に当たる"
+
+[[case]]
+id = "exc_test_eval"
+patch = "exceptions/exc_test_eval.patch"
+expect = []
+note = "code_eval の例外（テストコード）に当たる"
+
+[[case]]
+id = "exc_dummy_key"
+patch = "exceptions/exc_dummy_key.patch"
+expect = []
+note = "hardcoded_secret の例外（テスト用の値）に当たる"
+
+[[case]]
+id = "exc_firebase_key"
+patch = "exceptions/exc_firebase_key.patch"
+expect = []
+note = "hardcoded_secret の例外（公開前提の Firebase Web キー）に当たる"
+
+[[case]]
+id = "exc_comment_key"
+patch = "exceptions/exc_comment_key.patch"
+expect = []
+note = "hardcoded_secret の例外（コメントの中の例）に当たる"
+
+[[case]]
+id = "exc_log_continue"
+patch = "exceptions/exc_log_continue.patch"
+expect = []
+note = "swallowed_error の例外（ログを出して続行）に当たる"
+
+[[case]]
+id = "exc_fnf"
+patch = "exceptions/exc_fnf.patch"
+expect = []
+note = "swallowed_error の例外（既に無いことだけを無視）に当たる"
+
+[[case]]
+id = "exc_cleanup"
+patch = "exceptions/exc_cleanup.patch"
+expect = []
+note = "swallowed_error の例外（後片付けの失敗を無視）に当たる"

@@ -1,0 +1,7 @@
+diff --git a/db/functions/find_user.sql b/db/functions/find_user.sql
+--- a/db/functions/find_user.sql
++++ b/db/functions/find_user.sql
+@@ -40,2 +40,3 @@ CREATE FUNCTION find_user(tbl text, user_id text)
+   BEGIN
++  EXECUTE 'SELECT * FROM ' || tbl || ' WHERE id = ' || user_id;
+   END;

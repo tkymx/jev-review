@@ -1,0 +1,8 @@
+diff --git a/web/sync.js b/web/sync.js
+--- a/web/sync.js
++++ b/web/sync.js
+@@ -40,3 +40,4 @@ async function flush()
+   try {
+     await sync(items);
++  } catch (e) {}
+   render();

@@ -1,0 +1,8 @@
+diff --git a/api/orders.py b/api/orders.py
+--- a/api/orders.py
++++ b/api/orders.py
+@@ -40,2 +40,4 @@ def latest():
+   TABLE_NAME = "orders"  # モジュール定数
+   def latest():
++      q = "SELECT * FROM " + TABLE_NAME + " ORDER BY id DESC LIMIT 10"
++      return conn.execute(q).fetchall()

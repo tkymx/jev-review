@@ -1,0 +1,5 @@
+diff --git a/db/migrations/0042_add_nickname.sql b/db/migrations/0042_add_nickname.sql
+--- a/db/migrations/0042_add_nickname.sql
++++ b/db/migrations/0042_add_nickname.sql
+@@ -40,0 +41,1 @@
++ALTER TABLE users ADD COLUMN nickname text;

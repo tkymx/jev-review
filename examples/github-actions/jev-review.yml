@@ -1,0 +1,31 @@
+# Copy to .github/workflows/jev-review.yml and add a TYPESAFE_API_KEY repository secret.
+# The diff of the pull request is sent to TypeSafe's API.
+name: jev-review
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  jev-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install git+https://github.com/tkymx/jev-review
+      - name: Review the pull request
+        env:
+          TYPESAFE_API_KEY: ${{ secrets.TYPESAFE_API_KEY }}
+          BASE_REF: ${{ github.base_ref }}   # passed through env, not written into the script
+        run: jev-review run "origin/$BASE_REF...HEAD" -v core.en -o jev-review.xml --fail-on red
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jev-review
+          path: jev-review.xml

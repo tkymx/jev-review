@@ -1,0 +1,8 @@
+diff --git a/service/order.py b/service/order.py
+--- a/service/order.py
++++ b/service/order.py
+@@ -40,2 +40,4 @@ def submit(order):
+     validate(order)
++    print("DEBUG order payload:", order.raw)
++    # TODO: あとで消す
+     return repo.save(order)

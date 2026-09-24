@@ -1,0 +1,6 @@
+diff --git a/config/client.py b/config/client.py
+--- a/config/client.py
++++ b/config/client.py
+@@ -40,0 +41,2 @@ def build_client():
++    # 例: API_KEY=sk-live-0000000000000000 のような形式で環境変数に入れる
++    key = os.environ["API_KEY"]

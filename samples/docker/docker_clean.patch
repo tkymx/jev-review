@@ -1,0 +1,6 @@
+diff --git a/Dockerfile b/Dockerfile
+--- a/Dockerfile
++++ b/Dockerfile
+@@ -40,1 +40,2 @@
+   COPY requirements.txt .
++RUN pip install --no-cache-dir -r requirements.txt

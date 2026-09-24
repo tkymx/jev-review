@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jev-review version="1" tool="jev-review 0.1.0" model="jev-1.13.0" generated="2026-09-24T00:32:28+00:00">
+  <source kind="patch" path="examples/sample.patch" viewpoints="bundled:core.en" />
+  <thresholds red="0.7" yellow="0.5" />
+  <summary units="5" files="5" red="3" yellow="0" green="1" skipped="1" errors="0" calls="7" input-tokens="6890" cost-usd="0.000289" />
+  <viewpoints sources="bundled:core.en">
+    <viewpoint id="hardcoded_secret" severity="high" target="code" report="true">
+      <question>Does an added line contain an API key, token, password or private key written as a literal string, for example a value starting with sk-, ghp_, AIza, AKIA or xoxb-, or a long random alphanumeric value?</question>
+      <exception>Ignore test or documentation values that contain dummy, test, sample or xxxx.</exception>
+      <exception>Ignore the apiKey inside a JavaScript firebaseConfig object.</exception>
+      <exception>Ignore examples shown inside comments.</exception>
+    </viewpoint>
+    <viewpoint id="sql_injection" severity="high" target="code" report="true">
+      <question>Does an added line put an external value into an SQL statement by concatenation or interpolation (+, ||, f-string, format, %, template literal)?</question>
+      <exception>Ignore concatenation of constants defined in the code.</exception>
+      <exception>Ignore values passed through placeholders such as ?, $1 or :name.</exception>
+    </viewpoint>
+    <viewpoint id="shell_injection" severity="high" target="code" report="true">
+      <question>Does an added line run a shell command string that contains an external value, through os.system, subprocess with shell=True, child_process.exec, backticks, or ${{ github.event.* }} / ${{ github.head_ref }} written directly inside a GitHub Actions run: step?</question>
+      <exception>Ignore test code (files under tests/ or named test_*).</exception>
+    </viewpoint>
+    <viewpoint id="code_eval" severity="high" target="code" report="true">
+      <question>Does an added line execute an external value as code with eval, exec, new Function or Function()?</question>
+      <exception>Ignore test code (files under tests/ or named test_*).</exception>
+    </viewpoint>
+    <viewpoint id="html_injection" severity="high" target="code" report="true">
+      <question>Does an added line insert an external value into the page HTML through innerHTML, outerHTML, insertAdjacentHTML, document.write, dangerouslySetInnerHTML or v-html?</question>
+    </viewpoint>
+    <viewpoint id="remote_script" severity="high" target="code" report="true">
+      <question>Does an added line pipe a script downloaded from the network straight into a shell, written as curl ... | bash, curl ... | sh, wget -O- ... | sh or iex (irm ...)?</question>
+    </viewpoint>
+    <viewpoint id="unsafe_delete" severity="high" target="code" report="true">
+      <question>Does an added line run rm -rf, rm -r or Remove-Item -Recurse on a path built from a variable that can be empty, without quotes or a ${VAR:?} check?</question>
+    </viewpoint>
+    <viewpoint id="swallowed_error" severity="medium" target="code" report="true">
+      <question>Does an added line catch or ignore a failure and do nothing, written as except: pass, catch (e) {}, || true, try?, an error return assigned to _, or continue-on-error: true?</question>
+      <exception>Ignore cases that log the error and then continue.</exception>
+      <exception>Ignore cases that only ignore 'already gone' errors such as FileNotFoundError.</exception>
+      <exception>Ignore failures of cleanup code such as close() inside finally.</exception>
+    </viewpoint>
+    <viewpoint id="debug_leftover" severity="low" target="code" report="true">
+      <question>Does an added line contain debug output labeled DEBUG (print, console.log, NSLog, fmt.Println, puts) or a TODO that says to remove it later or marks it temporary?</question>
+      <exception>Ignore test code (files under tests/ or named test_*).</exception>
+      <exception>Ignore output that a CLI main function prints to show results to the user.</exception>
+    </viewpoint>
+    <viewpoint id="paid_api_without_guard" severity="high" target="code" report="true">
+      <question>Does an added line call a pay-per-use API (generative AI, image, video or speech generation) with no spending or count limit checked before the call?</question>
+    </viewpoint>
+    <viewpoint id="loop_off_by_one" severity="medium" target="code" report="true">
+      <question>Does an added loop use an end condition that is off by one from the array bounds, written as i &lt;= len(xs), i &lt;= arr.length, i &lt;= len(xs) in Go, or range(0, len(xs) - 1)?</question>
+    </viewpoint>
+    <viewpoint id="assignment_in_condition" severity="medium" target="code" report="true">
+      <question>Does an added if or while condition contain an assignment (=) where a comparison (== or ===) was meant?</question>
+    </viewpoint>
+    <viewpoint id="null_equality" severity="medium" target="code" report="true">
+      <question>Does added SQL compare with NULL using = NULL or != NULL instead of IS NULL?</question>
+    </viewpoint>
+    <viewpoint id="unbounded_wait_loop" severity="medium" target="code" report="true">
+      <question>Does an added line start a while True, while (true) or for (;;) waiting loop that has neither a retry limit nor a timeout?</question>
+    </viewpoint>
+    <viewpoint id="unclosed_resource" severity="low" target="code" report="true">
+      <question>Does an added line open a file or connection with open(), fopen, os.Open or sql.Open and use it without closing it through with, defer, try-with-resources or finally?</question>
+    </viewpoint>
+  </viewpoints>
+  <files>
+    <file path="api/orders.py" status="green">
+      <unit start="40" end="43" status="green" added-lines="2" enclosing="def find_orders(uid, limit):" is-code="0.990" />
+    </file>
+    <file path="api/users.py" status="red">
+      <unit start="40" end="43" status="red" added-lines="2" enclosing="def find_user(name):" is-code="0.990">
+        <finding id="sql_injection" kind="viewpoint" status="red" p="0.980" severity="high" />
+        <location line="41" p="1.000">    q = "SELECT * FROM users WHERE name = '" + name + "'"</location>
+      </unit>
+    </file>
+    <file path="docs/guide.md" status="skipped">
+      <unit start="41" end="42" status="skipped" added-lines="2" is-code="0.040" />
+    </file>
+    <file path="service/order.py" status="red">
+      <unit start="40" end="43" status="red" added-lines="2" enclosing="def submit(order):" is-code="0.970">
+        <finding id="debug_leftover" kind="viewpoint" status="red" p="0.990" severity="low" />
+        <location line="41" p="0.970">    print("DEBUG order payload:", order.raw)</location>
+      </unit>
+    </file>
+    <file path="web/view.js" status="red">
+      <unit start="40" end="41" status="red" added-lines="1" enclosing="render()" is-code="0.990">
+        <finding id="html_injection" kind="viewpoint" status="red" p="0.970" severity="high" />
+        <location line="41">  box.innerHTML = new URLSearchParams(location.search).get("q");</location>
+      </unit>
+    </file>
+  </files>
+</jev-review>

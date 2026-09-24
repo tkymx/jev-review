@@ -1,0 +1,6 @@
+diff --git a/internal/store/user.go b/internal/store/user.go
+--- a/internal/store/user.go
++++ b/internal/store/user.go
+@@ -40,1 +40,2 @@ func FindByName(db *sql.DB, name string)
++  rows, err := db.Query("SELECT * FROM users WHERE name = '" + name + "'")
+   if err != nil {

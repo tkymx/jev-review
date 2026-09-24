@@ -1,0 +1,7 @@
+diff --git a/tools/report_cli.py b/tools/report_cli.py
+--- a/tools/report_cli.py
++++ b/tools/report_cli.py
+@@ -40,2 +40,3 @@ def main():
+   def main():
+       total = compute(sys.argv[1:])
++      print(f"合計: {total} 件")

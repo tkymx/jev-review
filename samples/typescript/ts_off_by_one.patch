@@ -1,0 +1,9 @@
+diff --git a/src/cart.ts b/src/cart.ts
+--- a/src/cart.ts
++++ b/src/cart.ts
+@@ -40,2 +40,5 @@ function sum(items: Item[])
+   let sum = 0;
++  for (let i = 0; i <= items.length; i++) {
++    sum += items[i].price;
++  }
+   return sum;

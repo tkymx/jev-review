@@ -1,0 +1,11 @@
+diff --git a/db/session.py b/db/session.py
+--- a/db/session.py
++++ b/db/session.py
+@@ -40,3 +40,7 @@ def run(query):
+     try:
+         return conn.execute(query)
+     finally:
++        try:
++            conn.close()
++        except Exception:
++            pass

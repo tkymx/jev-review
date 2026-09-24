@@ -1,0 +1,9 @@
+diff --git a/media/clip.py b/media/clip.py
+--- a/media/clip.py
++++ b/media/clip.py
+@@ -40,2 +40,5 @@ def make_clip(prompt, seconds):
+     client = genai.Client(api_key=key)
++    op = client.models.generate_videos(model="veo-3.1", prompt=prompt,
++                                       config={"duration_seconds": seconds})
++    return wait(op)
+     

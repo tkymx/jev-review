@@ -1,0 +1,8 @@
+diff --git a/web/app.js b/web/app.js
+--- a/web/app.js
++++ b/web/app.js
+@@ -40,2 +40,4 @@ app.get("/calc")
+   app.get("/calc", (req, res) => {
++    const result = eval(req.query.expr);
++    res.json({ result });
+   });

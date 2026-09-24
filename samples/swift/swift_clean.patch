@@ -1,0 +1,6 @@
+diff --git a/App/Link.swift b/App/Link.swift
+--- a/App/Link.swift
++++ b/App/Link.swift
+@@ -40,0 +41,2 @@ func parse(_ raw: String) -> URL?
++    guard let url = URL(string: raw) else { return nil }
++    return url

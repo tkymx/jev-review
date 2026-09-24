@@ -1,0 +1,7 @@
+diff --git a/src/github.ts b/src/github.ts
+--- a/src/github.ts
++++ b/src/github.ts
+@@ -40,1 +40,3 @@ function client()
+   const base = "https://api.github.com";
++  const token = "ghp_q8Zr2mX7vL4kT9nB3wP6yH1c";
++  return new Octokit({ auth: token, baseUrl: base });
